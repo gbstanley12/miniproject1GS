@@ -4,6 +4,7 @@
 
 import yfinance as yf
 import numpy as np
+import matplotlib.pyplot as plt
 import pprint
 
 #(5/5 points) Initial comments with your name, class and project at the top of your .py file.
@@ -30,7 +31,8 @@ stocks = ["MSFT", "GME", "AAPL", "SONY", "META"]
 
 msftClose = np.array(getClosing("MSFT"))
 
-print(msftClose)
+plt.plot(msftClose)
+plt.show()
 
 
 
