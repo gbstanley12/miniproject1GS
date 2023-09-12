@@ -14,7 +14,10 @@ import pprint
 
 
 #Man United = MANU
-#BVB =
+#Madison Square Garden Sports = MSGS
+#Braves = BATRA
+#Blue Jays = RCI
+#Churchhill Downs = CHDN
 def getClosing(ticker):
     stock = yf.Ticker(ticker)
     # get historical market data
