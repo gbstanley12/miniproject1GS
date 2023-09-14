@@ -5,6 +5,7 @@
 import yfinance as yf
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 #Man United = MANU
 #Madison Square Garden Sports = MSGS
@@ -23,6 +24,12 @@ def getClosing(ticker):
         closingList.append(price)
 
     return closingList
+
+#Create our charts folder
+try:
+    Path("Charts").mkdir()
+except FileExistsError:
+    pass
 
 stocks = ["MSFT", "GME", "AAPL", "SONY", "META"]
 
