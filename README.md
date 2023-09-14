@@ -12,3 +12,9 @@ Please run the following:
 ```
 pip install -r requirements.txt
 ```
+
+## How to Run
+In a terminal window, type the following:
+```
+python main.py
+```
