@@ -8,66 +8,63 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 from pathlib import Path
 
-def getClosing(ticker):
-    # Get the closing price for the last 10 days
+# Function to get the long name of a stock based on its ticker symbol
+def getStockName(ticker):
     stock = yf.Ticker(ticker)
-    # get historical market data
+    info = stock.info
+    return info.get("longName", "Unknown")
+
+# Function to get the closing prices of a stock for the last 10 days
+def getClosing(ticker):
+    stock = yf.Ticker(ticker)
     hist = stock.history(period="10d")
-
     closingList = []
-
     for price in hist['Close']:
         closingList.append(price)
-
     return closingList
 
-# Create a custom formatting function for the y-axis labels
+# Function for custom formatting of y-axis labels with a dollar sign
 def dollar_formatter(x, pos):
-    return f"${x:.2f}"  # Format the number with a dollar sign and two decimal places
+    return f"${x:.2f}"
 
-# Create our charts folder
 try:
+    # Create a "Charts" directory if it doesn't exist
     Path("Charts").mkdir()
 except FileExistsError:
     pass
 
+# List of stock ticker symbols
 stocks = ["MANU", "MSGS", "BATRA", "RCI", "CHDN"]
 
-# Define a dictionary to map ticker symbols to stock names
-stock_names = {
-    "MANU": "Manchester United",
-    "MSGS": "Madison Square Garden Sports",
-    "BATRA": "Atlanta Braves",
-    "RCI": "Toronto Blue Jays",
-    "CHDN": "Churchill Downs",
-}
-
+# Loop through each stock
 for stock in stocks:
+    # Get the long name of the stock
+    stockName = getStockName(stock)
+    # Get the closing prices
     stockClosing = np.array(getClosing(stock))
     days = list(range(1, len(stockClosing) + 1))
 
-    # This plots the graph
+    # Plot the graph
     plt.plot(days, stockClosing)
 
-    # Get our min and max for Y axis
+    # Get the min and max prices for Y-axis
     prices = getClosing(stock)
     prices.sort()
     low_price = prices[0]
     high_price = prices[-1]
 
-    # Set our X axis min and max
+    # Set the X and Y axis limits
     plt.axis([1, 10, low_price - 1, high_price + 1])
 
-    # Set the title of the graph using the stock name
-    plt.title("Closing Price for " + stock_names.get(stock, "Unknown"))
-
+    # Set the title of the graph using the stock's long name
+    plt.title(f"Closing Price for {stockName}")
     plt.xlabel("Days")
 
-    # Set the y-axis labels with the custom dollar formatter
+    # Format Y-axis labels with a dollar sign
     plt.gca().yaxis.set_major_formatter(FuncFormatter(dollar_formatter))
 
-    # Save plots
-    savefile = "charts/" + stock + ".png"
+    # Save the plot as an image
+    savefile = f"charts/{stock}.png"
     plt.savefig(savefile)
 
     # Show the graph
